@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup - Falcon Finance</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .signup-container {
+            background: #fff;
+            padding: 24px;
+            max-width: 400px;
+            margin: 40px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .signup-container h2 { text-align: center; margin-bottom: 20px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; margin-bottom: 6px; }
+        input[type="text"], input[type="password"], input[type="file"] {
+            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;
+        }
+        .dp-preview { margin-top: 10px; max-width: 100px; border-radius: 50%; }
+        button { width: 100%; padding: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2> Falcon Finance Signup</h2>
+        <form id="signupForm" enctype="multipart/form-data" method="POST" action="/signup">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="contact">Contact</label>
+                <input type="text" id="contact" name="contact" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <div class="form-group">
+                <label for="dp">Upload Display Picture</label>
+                <input type="file" id="dp" name="dp" accept="image/*" required>
+                <img id="dpPreview" class="dp-preview" src="#" alt="DP Preview" style="display:none;">
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+    <script>
+        // Preview DP image
+        document.getElementById('dp').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('dpPreview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        // Simple password match validation
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            const pwd = document.getElementById('password').value;
+            const cpwd = document.getElementById('confirm_password').value;
+            if (pwd !== cpwd) {
+                alert('Passwords do not match!');
+                e.preventDefault();
+            }
+        });
+
+        // document.getElementById('paymentForm').addEventListener('submit', function(e) {
+        //     alert('Payment submitted!');
+        //     e.preventDefault();
+        // });
+    </script>
+</body>
+</html>

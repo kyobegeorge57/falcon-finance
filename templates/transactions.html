@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Falcon Finance - Transactions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f7fa; margin: 0; }
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        h2 {
+            text-align: center;
+            color: #1976d2;
+            margin-bottom: 2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        th, td {
+            padding: 0.8rem;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        th {
+            background: #1976d2;
+            color: #fff;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .total-row td {
+            font-weight: bold;
+            background: #f0f4fa;
+            color: #1976d2;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .back-btn {
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+        .back-btn:hover {
+            background: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Transaction History</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Amount Paid</th>
+                    <th>Date Submitted</th>
+                    <th>Payment Method</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for txn in transactions %}
+                <tr>
+                    <td>UGX {{ txn[0] }}</td>
+                    <td>{{ txn[1] }}</td>
+                    <td>{{ txn[2] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" style="text-align:center;">No transactions found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="total-row">
+                    <td colspan="2">Total Money Paid</td>
+                    <td>UGX {{ total_paid }}</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="footer">
+            <button class="back-btn" onclick="window.location.href='/homepage'">Back to Homepage</button>
+        </div>
+    </div>
+</body>
+</html>

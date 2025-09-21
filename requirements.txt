@@ -1,0 +1,18 @@
+Flask
+Flask-RESTful
+flask-cors
+flask-sqlalchemy
+flask-migrate
+sqlalchemy
+alembic
+marshmallow
+marshmallow-sqlalchemy
+python-dotenv
+requests
+
+mysql-connector-python  # Only if using MySQL
+gunicorn             # For deployment
+pytest
+pytest-flask
+pytest-cov
+Flask-Admin

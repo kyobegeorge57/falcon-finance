@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Falcon Finance - Homepage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { 
+            margin: 0; 
+            font-family: Arial, sans-serif; 
+            background: #e6ffe6; /* light green */
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1976d2;
+            color: #fff;
+            padding: 0.7rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar .dp {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+        }
+        .navbar .heading {
+            flex: 1;
+            text-align: center;
+            font-size: 1.7rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .navbar .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .navbar .dropbtn {
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        .navbar .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: #fff;
+            min-width: 260px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            border-radius: 6px;
+            overflow: hidden;
+            z-index: 1;
+            color: #333;
+        }
+        .navbar .dropdown-content .section {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        .navbar .dropdown-content .section:last-child {
+            border-bottom: none;
+        }
+        .navbar .dropdown-content h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+            color: #1976d2;
+        }
+        .navbar .dropdown-content ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .navbar .dropdown-content ul li {
+            margin-bottom: 0.5rem;
+            font-size: 0.98rem;
+        }
+        .navbar .dropdown-content ul li:last-child {
+            margin-bottom: 0;
+        }
+        .navbar .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        @media (max-width: 600px) {
+            .navbar { flex-direction: column; align-items: flex-start; }
+            .navbar .heading { text-align: left; font-size: 1.2rem; margin: 0.5rem 0; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <!-- User DP on upper left -->
+        <img src="{{ user.dp or 'user_dp.jpg' }}" alt="User DP" class="dp" id="userDp">
+        <!-- Heading in center -->
+        <div class="heading">Falcon Finance</div>
+        <!-- Dropdown on upper right -->
+        <div class="dropdown">
+            <button class="dropbtn">Profile &#9662;</button>
+            <div class="dropdown-content" id="profileDropdown">
+                <div class="section">
+                    <h4>Bio Data</h4>
+                    <ul>
+                        <li><strong>Name:</strong> <span id="bioName">{{ user.name }}</span></li>
+                        <li><strong>Contact:</strong> <span id="bioContact">{{ user.contact }}</span></li>
+                        <li><strong>Username:</strong> <span id="bioUsername">{{ user.username }}</span></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <h4>Transaction History</h4>
+                    <ul>
+                        <li>
+                            <button onclick="window.location.href='/transactions'">View Transactions</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div style="background:#d4edda;color:#155724;padding:10px;border-radius:4px;margin-bottom:15px;">
+          {% for message in messages %}
+            {{ message }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <!-- Main content can go here -->
+    <div style="max-width: 420px; margin: 40px auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+        <h3 style="text-align:center; color:#1976d2; margin-bottom:1.5rem;">Make a Payment</h3>
+        <form id="paymentForm" enctype="multipart/form-data" method="POST" action="/submit-payment">
+            <div style="margin-bottom: 1rem;">
+                <label for="amount" style="display:block; margin-bottom:6px;">Amount Paid</label>
+                <input type="number" id="amount" name="amount" required style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="display:block; margin-bottom:6px;">Payment Method</label>
+                <label><input type="radio" name="payment_method" value="Mobile Money" required> Mobile Money</label>
+                <label style="margin-left:20px;"><input type="radio" name="payment_method" value="Agent Banking" required> Agent Banking</label>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label for="txn_id" style="display:block; margin-bottom:6px;">Transaction ID</label>
+                <input type="text" id="txn_id" name="txn_id" required style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label for="receipt" style="display:block; margin-bottom:6px;">Upload Payment Receipt</label>
+                <input type="file" id="receipt" name="receipt" accept="image/*,application/pdf" required>
+            </div>
+            <button type="submit" style="width:100%; padding:10px; background:#1976d2; color:#fff; border:none; border-radius:4px; font-size:1rem; cursor:pointer;">Submit Payment</button>
+        </form>
+    </div>
+    <script>
+        // Example: You can set user data dynamically here
+        // document.getElementById('userDp').src = 'path_to_user_dp.jpg';
+        // document.getElementById('bioName').textContent = 'User Name';
+        // document.getElementById('bioContact').textContent = 'User Contact';
+        // document.getElementById('bioUsername').textContent = 'User Username';
+        // document.getElementById('txnHistory').innerHTML = '<li>...</li>';
+
+        // Optional: Preview uploaded receipt (image only)
+        document.getElementById('receipt').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    let img = document.getElementById('receiptPreview');
+                    if (!img) {
+                        img = document.createElement('img');
+                        img.id = 'receiptPreview';
+                        img.style.maxWidth = '120px';
+                        img.style.marginTop = '10px';
+                        img.style.borderRadius = '6px';
+                        event.target.parentNode.appendChild(img);
+                    }
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
